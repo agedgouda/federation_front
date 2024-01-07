@@ -14,9 +14,18 @@ export const useShipStore = defineStore('ship', () => {
       throw new Error(error.message);
     }
   }
+  async function getClassShips(id) {
+    try {
+      const response = await axios.get('http://127.0.0.1:8000/api/ships/class/'+id);
+      return response.data.data;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
 
   return {
     ships,
     getFactionClasses,
+    getClassShips,
   }
 })

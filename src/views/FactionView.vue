@@ -80,7 +80,7 @@ const leadShip = (value) => {
       <FactionCard class="mb-6" :faction=faction />
 
       <CardBox class="mb-6" has-table>
-        <TableFactionClasses :faction-id=factionId   @lead-ship="leadShip" />
+        <TableFactionClasses :faction-id=factionId @lead-ship="leadShip" />
       </CardBox>
       <CardBoxShip :ship=ship v-if="ship.id"/>
     </SectionMain>

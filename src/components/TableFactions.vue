@@ -99,33 +99,14 @@ const checked = (isChecked, client) => {
   </CardBoxModal>
 
   <table class="table-auto">
-    <thead>
-      <tr>
-        <th v-if="checkable" />
-        <th />
-        <th>Name</th>
-        <th />
-      </tr>
-    </thead>
     <tbody>
-      <tr v-for="faction in itemsPaginated">
+      <tr v-for="faction in itemsPaginated"  @click="factionDetails(faction.id)"  class="cursor-pointer">
         <TableCheckboxCell v-if="checkable" @checked="checked($event, client)" :key="faction.id"/>
         <td data-label="logo" class="w-20">
           <img :src=faction.logo_url> 
         </td>
         <td data-label="Company">
           {{ faction.name }}
-        </td>
-        <td class="before:hidden lg:w-1 whitespace-nowrap">
-          <BaseButtons type="justify-start lg:justify-end" no-wrap>
-            <BaseButton color="info" :icon="mdiEye" small @click="factionDetails(faction.id)" />
-            <BaseButton
-              color="danger"
-              :icon="mdiTrashCan"
-              small
-              @click="isModalDangerActive = true"
-            />
-          </BaseButtons>
         </td>
       </tr>
     </tbody>

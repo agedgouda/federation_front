@@ -5,6 +5,7 @@ import CardBox from '@/components/CardBox.vue'
 import BaseLevel from '@/components/BaseLevel.vue'
 import PillTag from '@/components/PillTag.vue'
 import IconRounded from '@/components/IconRounded.vue'
+import TableClassShips from './TableClassShips.vue'
 
 const props = defineProps({
   ship: {
@@ -13,6 +14,8 @@ const props = defineProps({
   },
 })
 const ship = ref(props.ship);
+const shipClassId  = ref(props.ship.id);
+
 </script>
 
 <template>
@@ -21,7 +24,7 @@ const ship = ref(props.ship);
     <BaseLevel>
       <BaseLevel type="justify-start">
         <div class="text-center space-y-1 md:text-left md:mr-6">
-          <h4 class="text-xl">{{ ship.faction_identifier }} {{ ship.name }} <span class="italic">{{ ship.faction_registry }} {{ ship.id }}</span></h4>
+          <h4 class="text-xl">{{ ship.faction_identifier }} {{ ship.name }} <span class="italic">{{ ship.registry }}</span></h4>
           <h3>{{ ship.ship_class }} <span v-if="ship.ship_class == 'Lead ship'">of class</span><span v-else>class</span></h3>
           <div>{{ ship.type }} </div>
           <div>Ship Power: {{ ship.power }} </div>
@@ -185,10 +188,21 @@ const ship = ref(props.ship);
                 </table>
               </CardBox>
             </div>
-            <div class="flex flex-col justify-between">
+          </div>
+          <div class="grid grid-cols-2 lg:grid-cols-2 gap-6 mb-6">
+              <div class="flex flex-col justify-between">
+                <CardBox class="mb-2">
+                  <img :src=ship.ship_image_url style="background-color:white"> 
+                </CardBox>
+              </div>
+              <div class="flex flex-col justify-between">
+                <CardBox class="mb-2">
+                <span v-if="ship.id = shipClassId">{{ ship.name }}</span><span v-else>Other {{ ship.ship_class }}</span> Class Ships
+                <TableClassShips :class-id=shipClassId />
+                </CardBox>
+              </div>
             </div>
           </div>
-        </div>
       </BaseLevel>
     </BaseLevel>
   </CardBox>

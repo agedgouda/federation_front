@@ -23,7 +23,7 @@ const path = computed(() =>route.path.replace('/',''));
       </SectionTitleLineWithButton>
 
       <CardBox class="mb-6" has-table>
-        <TableFactions checkable v-if="path == 'factions'"/>
+        <TableFactions v-if="path == 'factions'"/>
       </CardBox>
     </SectionMain>
   </LayoutAuthenticated>

@@ -8,23 +8,20 @@ import BaseButtons from '@/components/BaseButtons.vue'
 import BaseButton from '@/components/BaseButton.vue'
 import { useRouter } from 'vue-router';
 
-
-const router = useRouter();
 const shipStore = useShipStore();
-const emit = defineEmits(['lead-ship'])
 
 const props = defineProps({
-    factionId: {
-    type: String,
+    classId: {
+    type: Number,
     required: true,
   },
 });
 
-const factionClassShips = ref([]); // Reactive ref to hold fetched factions
+const classShips = ref([]); 
 
 onMounted(async () => {
   try {
-    factionClassShips.value = await shipStore.getFactionClasses(props.factionId); // Call the fetchFactions function
+    classShips.value = await shipStore.getClassShips(props.classId); 
   } catch (error) {
     console.error(error);
     // Handle error or throw it further if needed
@@ -32,7 +29,7 @@ onMounted(async () => {
   }
 });
 
-const items = computed(() => factionClassShips.value)
+const items = computed(() => classShips.value)
 
 const getShipDetails = (leadShip) => {
     emit('lead-ship', leadShip);
@@ -81,12 +78,12 @@ const remove = (arr, cb) => {
       </tr>
     </thead>
     <tbody>
-      <tr v-for="ship in itemsPaginated" @click="getShipDetails(ship)" class="cursor-pointer">
+      <tr v-for="ship in itemsPaginated">
         <td data-label="image" class="w-20">
           <img :src=ship.ship_counter_url style="background-color:white"> 
         </td>
         <td data-label="ship name">
-          {{ ship.name }} Class
+          {{ ship.name }} {{ ship.registry }}
         </td>
       </tr>
     </tbody>
