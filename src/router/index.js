@@ -3,21 +3,14 @@ import Style from '@/views/StyleView.vue'
 import Home from '@/views/HomeView.vue'
 
 const routes = [
-  {
-    meta: {
-      title: 'Select style'
-    },
-    path: '/',
-    name: 'style',
-    component: Style
-  },
+
   {
     // Document title tag
     // We combine it with defaultDocumentTitle set in `src/main.js` on router.afterEach hook
     meta: {
       title: 'Dashboard'
     },
-    path: '/dashboard',
+    path: '/',
     name: 'dashboard',
     component: Home
   },
@@ -28,6 +21,22 @@ const routes = [
     path: '/tables',
     name: 'tables',
     component: () => import('@/views/TablesView.vue')
+  },
+  {
+    meta: {
+      title: 'Factions'
+    },
+    path: '/factions',
+    name: 'factions',
+    component: () => import('@/views/TablesView.vue')
+  },
+  {
+    meta: {
+      title: 'Factions'
+    },
+    path: '/factions/:id',
+    name: 'faction',
+    component: () => import('@/views/FactionView.vue')
   },
   {
     meta: {

@@ -15,13 +15,8 @@ import {
 
 export default [
   {
-    to: '/dashboard',
-    icon: mdiMonitor,
-    label: 'Dashboard'
-  },
-  {
-    to: '/tables',
-    label: 'Tables',
+    to: '/factions',
+    label: 'Factions',
     icon: mdiTable
   },
   {
