@@ -40,10 +40,10 @@ export const useFactionStore = defineStore('faction', () => {
         alert(error.message)
       })
   }
-
+  console.log()
   async function getFactions() {
     try {
-      const response = await axios.get('http://127.0.0.1:8000/api/factions/');
+      const response = await axios.get(import.meta.env.VITE_API_URL+'factions/');
       return response.data;
     } catch (error) {
       throw new Error(error.message);
@@ -53,7 +53,7 @@ export const useFactionStore = defineStore('faction', () => {
 
   async function getFaction(id) {
     try {
-      const response = await axios.get('http://127.0.0.1:8000/api/factions/'+id);
+      const response = await axios.get(import.meta.env.VITE_API_URL+'factions/'+id);
       return response.data.data;
     } catch (error) {
       throw new Error(error.message);

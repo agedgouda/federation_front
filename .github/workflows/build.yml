@@ -26,6 +26,7 @@ jobs:
         run: |
           npm install
           npm run build
+        working-directory: federation_front
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         with:

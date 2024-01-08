@@ -22,7 +22,6 @@ const shipClassId  = ref(props.ship.id);
 
 onMounted(async () => {
   try {
-    console.log(shipClassId.value)
     classShips.value = await shipStore.getClassShips(shipClassId.value); 
   } catch (error) {
     console.error(error);
@@ -46,7 +45,7 @@ const sortedShipData = computed(() => {
   
   <CardBox class="mb-6 last:mb-0">
     <BaseLevel>
-      <BaseLevel type="justify-start">{{shipClassId}}
+      <BaseLevel type="justify-start">
         <div class="text-center space-y-1 md:text-left md:mr-6">
           <h4 class="text-xl">{{ ship.faction_identifier }} {{ ship.name }} <span class="italic">{{ ship.registry }}</span></h4>
           <h3>{{ ship.ship_class }} <span v-if="ship.ship_class == 'Lead ship'">of class</span><span v-else>class</span></h3>
