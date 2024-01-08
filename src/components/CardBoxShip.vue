@@ -156,6 +156,10 @@ const sortedShipData = computed(() => {
                       <td>{{ ship.lab }}</td>
                     </tr>
                     <tr>
+                      <td>Shuttle Bays</td>
+                      <td>{{ ship.shuttle_bays }}</td>
+                    </tr>
+                    <tr>
                       <td>Transporter</td>
                       <td>{{ ship.transporter }}</td>
                     </tr>
