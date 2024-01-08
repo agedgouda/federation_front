@@ -2,42 +2,40 @@
 import { reactive,onMounted,ref } from 'vue'
 import { useMainStore } from '@/stores/main'
 import { useFactionStore } from '@/stores/faction'
+import { useShipStore } from '@/stores/ship'
 import {computed} from 'vue'
 import { useRoute } from 'vue-router';
 import { mdiAccount, mdiMail, mdiAsterisk, mdiFormTextboxPassword, mdiApacheKafka } from '@mdi/js'
 import SectionMain from '@/components/SectionMain.vue'
 import CardBox from '@/components/CardBox.vue'
-import BaseDivider from '@/components/BaseDivider.vue'
-import FormField from '@/components/FormField.vue'
-import FormControl from '@/components/FormControl.vue'
-import FormFilePicker from '@/components/FormFilePicker.vue'
 import BaseButton from '@/components/BaseButton.vue'
-import BaseButtons from '@/components/BaseButtons.vue'
 import FactionCard from '@/components/FactionCard.vue'
 import LayoutAuthenticated from '@/layouts/LayoutAuthenticated.vue'
 import SectionTitleLineWithButton from '@/components/SectionTitleLineWithButton.vue'
-import TableFactionClasses from '@/components/TableFactionClasses.vue'
 import CardBoxShip from '@/components/CardBoxShip.vue'
+import TableFormat from '@/components/TableFormat.vue'
 
 const route = useRoute();
 const path = computed(() =>route.path.replace('/factions/',''));
 const factionId = path.value;
 const mainStore = useMainStore()
 const factionStore = useFactionStore();
+const shipStore = useShipStore();
 
 const defaultFactionData = {
-   "id": "",
+  "id": "",
   "logo_url": "",
   "name": ""
 };
 
 const faction = ref(defaultFactionData);
 const ship = ref({});
+const factionClassShips = ref([]); // Reactive ref to hold fetched factions
 
 onMounted(async () => {
-
   try {
     faction.value = await factionStore.getFaction(factionId); // Call the fetchFactions function
+    factionClassShips.value = await shipStore.getFactionClasses(factionId);
   } catch (error) {
     console.error(error);
     // Handle error or throw it further if needed
@@ -45,20 +43,16 @@ onMounted(async () => {
   }
 });
 
-const profileForm = reactive({
-  name: mainStore.userName,
-  email: mainStore.userEmail
+const sortedFactionData = computed(() => {
+  return factionClassShips.value.map(item => ({
+    ship_counter_url: item.ship_counter_url,
+    name: item.name,
+    id: item.id,
+  }))
 })
-
-const passwordForm = reactive({
-  password_current: '',
-  password: '',
-  password_confirmation: ''
-})
-
 
 const leadShip = (value) => {
-  ship.value = value;
+  ship.value = factionClassShips.value.find(item => item.id === value);
 };
 </script>
 
@@ -78,9 +72,15 @@ const leadShip = (value) => {
       </SectionTitleLineWithButton>
 
       <FactionCard class="mb-6" :faction=faction />
-
       <CardBox class="mb-6" has-table>
-        <TableFactionClasses :faction-id=factionId @lead-ship="leadShip" />
+        <TableFormat  :table-data=sortedFactionData @on-click="leadShip" >
+          <template v-slot:column-ship_counter_url="{ item }">
+            <td data-label="image" class="w-20"> <img :src="item" style="background-color:white" /></td>
+          </template>
+          <template v-slot:column-name="{ item }">
+            <td> {{ item }} Class</td>
+          </template>
+        </TableFormat>
       </CardBox>
       <CardBoxShip :ship=ship v-if="ship.id"/>
     </SectionMain>

@@ -1,11 +1,12 @@
 <script setup>
-import { computed,ref } from 'vue'
+import { computed,ref,onMounted } from 'vue'
 import { mdiCashMinus, mdiCashPlus, mdiReceipt, mdiCreditCardOutline } from '@mdi/js'
 import CardBox from '@/components/CardBox.vue'
 import BaseLevel from '@/components/BaseLevel.vue'
 import PillTag from '@/components/PillTag.vue'
 import IconRounded from '@/components/IconRounded.vue'
-import TableClassShips from './TableClassShips.vue'
+import TableFormat from '@/components/TableFormat.vue'
+import { useShipStore } from '@/stores/ship'
 
 const props = defineProps({
   ship: {
@@ -13,8 +14,31 @@ const props = defineProps({
     required: true
   },
 })
+
+const shipStore = useShipStore();
+const classShips = ref([]); 
 const ship = ref(props.ship);
 const shipClassId  = ref(props.ship.id);
+
+onMounted(async () => {
+  try {
+    console.log(shipClassId.value)
+    classShips.value = await shipStore.getClassShips(shipClassId.value); 
+  } catch (error) {
+    console.error(error);
+    // Handle error or throw it further if needed
+    throw new Error(error.message);
+  }
+});
+const sortedShipData = computed(() => {
+  return classShips.value.map(item => ({
+    ship_counter_url: item.ship_counter_url,
+    name: item.name + ' '+ item.registry,
+    id: item.id,
+  }))
+})
+
+
 
 </script>
 
@@ -22,7 +46,7 @@ const shipClassId  = ref(props.ship.id);
   
   <CardBox class="mb-6 last:mb-0">
     <BaseLevel>
-      <BaseLevel type="justify-start">
+      <BaseLevel type="justify-start">{{shipClassId}}
         <div class="text-center space-y-1 md:text-left md:mr-6">
           <h4 class="text-xl">{{ ship.faction_identifier }} {{ ship.name }} <span class="italic">{{ ship.registry }}</span></h4>
           <h3>{{ ship.ship_class }} <span v-if="ship.ship_class == 'Lead ship'">of class</span><span v-else>class</span></h3>
@@ -198,7 +222,14 @@ const shipClassId  = ref(props.ship.id);
               <div class="flex flex-col justify-between">
                 <CardBox class="mb-2">
                 <span v-if="ship.id = shipClassId">{{ ship.name }}</span><span v-else>Other {{ ship.ship_class }}</span> Class Ships
-                <TableClassShips :class-id=shipClassId />
+                <TableFormat  :table-data=sortedShipData>
+                  <template v-slot:column-ship_counter_url="{ item }">
+                    <td data-label="image" class="w-20"> <img :src="item" style="background-color:white" /></td>
+                  </template>
+                  <template v-slot:column-name="{ item }">
+                    <td> {{ item }} </td>
+                  </template>
+                </TableFormat>
                 </CardBox>
               </div>
             </div>

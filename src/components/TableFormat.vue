@@ -1,43 +1,30 @@
 <script setup>
 import { computed, ref,onMounted } from 'vue'
 import { mdiEye, mdiTrashCan } from '@mdi/js'
-import { useShipStore } from '@/stores/ship'
-import CardBoxModal from '@/components/CardBoxModal.vue'
+import TableCheckboxCell from '@/components/TableCheckboxCell.vue'
 import BaseLevel from '@/components/BaseLevel.vue'
 import BaseButtons from '@/components/BaseButtons.vue'
 import BaseButton from '@/components/BaseButton.vue'
-import { useRouter } from 'vue-router';
 
-const shipStore = useShipStore();
 
 const props = defineProps({
-    classId: {
-    type: Number,
-    required: true,
-  },
-});
-
-const classShips = ref([]); 
-
-onMounted(async () => {
-  try {
-    classShips.value = await shipStore.getClassShips(props.classId); 
-  } catch (error) {
-    console.error(error);
-    // Handle error or throw it further if needed
-    throw new Error(error.message);
+  checkable: Boolean,
+  tableData: Object,
+  tableHeader: Array,
+  rowsPerPage: {
+      type: Number,
+      default: 20
   }
-});
+})
 
-const items = computed(() => classShips.value)
-
-const getShipDetails = (leadShip) => {
-    emit('lead-ship', leadShip);
+const emit = defineEmits(['on-click']);
+const rowClicked = (value) => {
+    emit('on-click', value);
 }
 
-const perPage = ref(5)
-
-const currentPage = ref(0)
+const items = computed(() => props.tableData)
+const perPage = ref(props.rowsPerPage)
+const currentPage = ref(0);
 
 const itemsPaginated = computed(() =>
   items.value.slice(perPage.value * currentPage.value, perPage.value * (currentPage.value + 1))
@@ -71,20 +58,17 @@ const remove = (arr, cb) => {
 
 <template>
   <table class="table-auto">
-    <thead>
+    <thead v-if=tableHeader>
       <tr>
-        <th />
-        <th>Class Name</th>
+        <th  v-for="headerItem in tableHeader">{{headerItem}}</th>
       </tr>
     </thead>
     <tbody>
-      <tr v-for="ship in itemsPaginated">
-        <td data-label="image" class="w-20">
-          <img :src=ship.ship_counter_url style="background-color:white"> 
-        </td>
-        <td data-label="ship name">
-          {{ ship.name }} {{ ship.registry }}
-        </td>
+      <tr v-for="(item, rowIndex) in itemsPaginated" @click="rowClicked(item.id)" class="cursor-pointer" :key="rowIndex">
+        <TableCheckboxCell v-if="checkable" @checked="checked($event, client)" :key="item.id"/>
+        <template v-for="(value, key) in item" :key="key">
+          <slot :name="`column-${key}`" :item="value" :index="key" />
+        </template>
       </tr>
     </tbody>
   </table>

@@ -28,7 +28,7 @@ const routes = [
     },
     path: '/factions',
     name: 'factions',
-    component: () => import('@/views/TablesView.vue')
+    component: () => import('@/views/FactionsView.vue')
   },
   {
     meta: {
