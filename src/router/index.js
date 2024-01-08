@@ -16,14 +16,6 @@ const routes = [
   },
   {
     meta: {
-      title: 'Tables'
-    },
-    path: '/tables',
-    name: 'tables',
-    component: () => import('@/views/TablesView.vue')
-  },
-  {
-    meta: {
       title: 'Factions'
     },
     path: '/factions',
