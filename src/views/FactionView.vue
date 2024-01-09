@@ -50,7 +50,7 @@ const sortedFactionData = computed(() => {
     id: item.id,
   }))
 })
-console.log(import.meta.env.MODE)
+
 const leadShip = (value) => {
   ship.value = factionClassShips.value.find(item => item.id === value);
 };
