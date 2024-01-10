@@ -7,6 +7,7 @@ import PillTag from '@/components/PillTag.vue'
 import IconRounded from '@/components/IconRounded.vue'
 import TableFormat from '@/components/TableFormat.vue'
 import { useShipStore } from '@/stores/ship'
+import Boxes from './Boxes.vue'
 
 const props = defineProps({
   ship: {
@@ -97,31 +98,40 @@ const sortedShipData = computed(() => {
                   <tbody>
                     <tr>
                       <td>Shield 1</td>
-                      <td>{{ ship.shield_1 }}</td>
+                      <td>
+                        <Boxes :total=ship.shield_1  />
+                      </td>
                     </tr>
                     <tr>
                       <td>Shield 2</td>
-                      <td>{{ ship.shield_2 }}</td>
+                      <td>
+                        <Boxes :total=ship.shield_2  />
+                      </td>
                     </tr>
                     <tr>
                       <td>Shield 3</td>
-                      <td>{{ ship.shield_3 }}</td>
+                      <td>
+                        <Boxes :total=ship.shield_3  />
+                      </td>
                     </tr>
                     <tr>
                       <td>Forward Hull</td>
-                      <td>{{ ship.f_hull }}</td>
+                      <td><Boxes :total=ship.f_hull  />
+                      </td>
                     </tr>
                     <tr>
                       <td>Rear Hull</td>
-                      <td>{{ ship.r_hull }}</td>
+                      <td>
+                        <Boxes :total=ship.r_hull  />
+                      </td>
                     </tr>
                     <tr v-if="ship.c_hull > 0">
                       <td>Rear Hull</td>
-                      <td>{{ ship.r_hull }}</td>
+                      <td>{{ ship.c_hull }}</td>
                     </tr>
                     <tr v-if="ship.l_hull > 0">
                       <td>Rear Hull</td>
-                      <td>{{ ship.r_hull }}</td>
+                      <td>{{ ship.l_hull }}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -140,55 +150,55 @@ const sortedShipData = computed(() => {
                   <tbody>
                     <tr>
                       <td>Auxiliary Control</td>
-                      <td>{{ ship.aux }}</td>
+                      <td><Boxes :total=ship.aux  /></td>
                     </tr>
                     <tr>
                       <td>Bridge</td>
-                      <td>{{ ship.bridge }}</td>
+                      <td><Boxes :total=ship.bridge  /></td>
                     </tr>
                     <tr>
                       <td>Emergency Bridge</td>
-                      <td>{{ ship.emergency_bridge }}</td>
+                      <td><Boxes :total=ship.emergency_bridge  /></td>
                     </tr>
                     <tr>
                       <td>Lab</td>
-                      <td>{{ ship.lab }}</td>
+                      <td><Boxes :total=ship.lab  /></td>
                     </tr>
                     <tr>
                       <td>Shuttle Bays</td>
-                      <td>{{ ship.shuttle_bays }}</td>
+                      <td><Boxes :total=ship.shuttle_bays  /></td>
                     </tr>
                     <tr>
                       <td>Transporter</td>
-                      <td>{{ ship.transporter }}</td>
+                      <td><Boxes :total=ship.transporter  /></td>
                     </tr>
                     <tr>
                       <td>Tractor Beam</td>
-                      <td>{{ ship.tractor_beam }}</td>
+                      <td><Boxes :total=ship.tractor_beam  /></td>
                     </tr>
                     <tr>
                       <td>Reactor</td>
-                      <td>{{ ship.power_reactor }}</td>
+                      <td><Boxes :total=ship.power_reactor  /></td>
                     </tr>
                     <tr>
                       <td>Impulse Engine</td>
-                      <td>{{ ship.impulse }}</td>
+                      <td><Boxes :total=ship.impulse  /></td>
                     </tr>
                     <tr>
                       <td>Battery</td>
-                      <td>{{ ship.battery }}</td>
+                      <td><Boxes :total=ship.battery  /></td>
                     </tr>
                     <tr>
                       <td>Right Warp</td>
-                      <td>{{ ship.r_warp }}</td>
+                      <td><Boxes :total=ship.r_warp  /></td>
                     </tr>
                     <tr>
                       <td>Left Warp</td>
-                      <td>{{ ship.l_warp }}</td>
+                      <td><Boxes :total=ship.l_warp  /></td>
                     </tr>
                     <tr v-if="ship.c_warp > 0">
                       <td>Center Warp</td>
-                      <td>{{ ship.c_warp }}</td>
+                      <td><Boxes :total=ship.c_warp  /></td>
                     </tr>
                   </tbody>
                 </table>
