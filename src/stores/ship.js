@@ -22,10 +22,25 @@ export const useShipStore = defineStore('ship', () => {
       throw new Error(error.message);
     }
   }
+  async function setShip(newShip) {
+    try {
+      const response = await axios.post(import.meta.env.VITE_API_URL+'ships/',
+        { 
+          "name": newShip.name,
+          "ship_class_id": newShip.ship_class_id,
+          "registry": newShip.registry,
+        }
+       )
+      return response.data;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
 
   return {
     ships,
     getFactionClasses,
     getClassShips,
+    setShip,
   }
 })

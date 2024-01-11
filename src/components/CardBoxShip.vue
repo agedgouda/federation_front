@@ -1,6 +1,6 @@
 <script setup>
-import { computed,ref,onMounted } from 'vue'
-import { mdiCashMinus, mdiCashPlus, mdiReceipt, mdiCreditCardOutline } from '@mdi/js'
+import { computed,ref,onMounted,reactive } from 'vue'
+import { mdiCashMinus, mdiPlusBox,mdiPlus, mdiReceipt, mdiCreditCardOutline } from '@mdi/js'
 import CardBox from '@/components/CardBox.vue'
 import BaseLevel from '@/components/BaseLevel.vue'
 import PillTag from '@/components/PillTag.vue'
@@ -8,6 +8,10 @@ import IconRounded from '@/components/IconRounded.vue'
 import TableFormat from '@/components/TableFormat.vue'
 import { useShipStore } from '@/stores/ship'
 import Boxes from './Boxes.vue'
+import BaseButton from '@/components/BaseButton.vue'
+import BaseButtons from '@/components/BaseButtons.vue'
+import FormField from '@/components/FormField.vue'
+import FormControl from '@/components/FormControl.vue'
 
 const props = defineProps({
   ship: {
@@ -20,6 +24,7 @@ const shipStore = useShipStore();
 const classShips = ref([]); 
 const ship = ref(props.ship);
 const shipClassId  = ref(props.ship.id);
+const showAddShipsForm = ref(false)
 
 onMounted(async () => {
   try {
@@ -38,8 +43,31 @@ const sortedShipData = computed(() => {
   }))
 })
 
+const newShip = reactive({
+  name: '',
+  registry: props.ship.registry_stub + ' - ',
+  ship_class_id: shipClassId.value
+})
 
+const addShipField  = () => {
+  showAddShipsForm.value = !showAddShipsForm.value
+}
+const cancelSaveShip  = () => {
+  newShip.name =  '',
+  newShip.registry = props.ship.registry_stub + ' - '
+  showAddShipsForm.value = !showAddShipsForm.value
+}
 
+async function saveShip() {
+  try {
+    const addedShip = await shipStore.setShip(newShip);
+    classShips.value.push(addedShip);
+    cancelSaveShip();
+  } catch (error) {
+    console.error('Error:', error);
+    
+  }
+}
 </script>
 
 <template>
@@ -48,10 +76,12 @@ const sortedShipData = computed(() => {
     <BaseLevel>
       <BaseLevel type="justify-start">
         <div class="text-center space-y-1 md:text-left md:mr-6">
-          <h4 class="text-xl">{{ ship.faction_identifier }} {{ ship.name }} <span class="italic">{{ ship.registry }}</span></h4>
-          <h3>{{ ship.ship_class }} <span v-if="ship.ship_class == 'Lead ship'">of class</span><span v-else>class</span></h3>
-          <div>{{ ship.type }} </div>
-          <div>Ship Power: {{ ship.power }} </div>
+          <CardBox class="mb-2">
+            <h4 class="text-xl">{{ ship.faction_identifier }} {{ ship.name }} <span class="italic">{{ ship.registry }}</span></h4>
+            <h3>{{ ship.ship_class }} <span v-if="ship.ship_class == 'Lead ship'">of class</span><span v-else>class</span></h3>
+            <div>{{ ship.type }} </div>
+            <div>Ship Power: {{ ship.power }} </div>
+          </CardBox>
           <div class="grid grid-cols-3 lg:grid-cols-3 gap-6 mb-6">
             <div class="flex flex-col justify-between">
               <CardBox class="mb-2">
@@ -234,15 +264,47 @@ const sortedShipData = computed(() => {
               </div>
               <div class="flex flex-col justify-between">
                 <CardBox class="mb-2">
-                <span v-if="ship.id = shipClassId">{{ ship.name }}</span><span v-else>Other {{ ship.ship_class }}</span> Class Ships
-                <TableFormat  :table-data=sortedShipData>
-                  <template v-slot:column-ship_counter_url="{ item }">
-                    <td data-label="image" class="w-20"> <img :src="item" style="background-color:white" /></td>
-                  </template>
-                  <template v-slot:column-name="{ item }">
-                    <td> {{ item }} </td>
-                  </template>
-                </TableFormat>
+                  <span v-if="ship.id = shipClassId">{{ ship.name }}</span><span v-else>Other {{ ship.ship_class }}</span> Class Ships
+                  <TableFormat  :table-data=sortedShipData>
+                    <template v-slot:column-ship_counter_url="{ item }">
+                      <td data-label="image" class="w-20"> <img :src="item" style="background-color:white" /></td>
+                    </template>
+                    <template v-slot:column-name="{ item }">
+                      <td> {{ item }} </td>
+                    </template>
+                    
+                  </TableFormat>
+                  
+                  <div class="grid grid-cols-3 gap-3" v-if = "showAddShipsForm">
+                    <div >
+                      <FormControl v-model="newShip.name" />
+                    </div>
+                    <div>
+                      <FormControl v-model="newShip.registry"/>
+                    </div>
+                    <div class="flex items-center">
+                      <BaseButtons>                    
+                        <BaseButton
+                         color="danger"
+                         label="Save"
+                         :small=true
+                        @click="saveShip()"
+                      />                   
+                      <BaseButton
+                        color="danger"
+                        label="Cancel"
+                        :outline=true
+                        :small=true
+                        @click="cancelSaveShip()"
+                      />
+                      </BaseButtons>
+                    </div>
+                  </div>
+                  <div class="flex justify-end" v-if = "!showAddShipsForm" >
+                    <BaseButtons > 
+                      <BaseButton color="info" label="Add Ship to Class" @click="addShipField()" :small=true />
+                    </BaseButtons>
+                  </div> 
                 </CardBox>
               </div>
             </div>

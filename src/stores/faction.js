@@ -40,7 +40,7 @@ export const useFactionStore = defineStore('faction', () => {
         alert(error.message)
       })
   }
-  console.log()
+
   async function getFactions() {
     try {
       const response = await axios.get(import.meta.env.VITE_API_URL+'factions/');
@@ -59,8 +59,6 @@ export const useFactionStore = defineStore('faction', () => {
       throw new Error(error.message);
     }
   }
-
-
 
   function fetchSampleHistory() {
     axios
