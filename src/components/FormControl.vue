@@ -40,6 +40,10 @@ const props = defineProps({
     type: String,
     default: 'text'
   },
+  label: {
+    type: String,
+    default: ''
+  },
   modelValue: {
     type: [String, Number, Boolean, Array, Object],
     default: ''
@@ -124,7 +128,10 @@ if (props.ctrlKFocus) {
 </script>
 
 <template>
+     
   <div class="relative">
+    
+    <div >{{ label }}<span v-if="label === ''">&NonBreakingSpace;</span></div>
     <select
       v-if="computedType === 'select'"
       :id="id"
@@ -146,8 +153,8 @@ if (props.ctrlKFocus) {
       :placeholder="placeholder"
       :required="required"
     />
+    <span v-else>
     <input
-      v-else
       :id="id"
       ref="inputEl"
       v-model="computedValue"
@@ -160,6 +167,7 @@ if (props.ctrlKFocus) {
       :type="computedType"
       :class="inputElClass"
     />
-    <FormControlIcon v-if="icon" :icon="icon" :h="controlIconH" />
+  </span>
+    <FormControlIcon v-if="icon" :icon="icon" :h="controlIconH" label/>
   </div>
 </template>

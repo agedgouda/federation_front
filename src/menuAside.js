@@ -20,6 +20,11 @@ export default [
     icon: mdiTable
   },
   {
+    to: '/weapons',
+    label: 'Weapons',
+    icon: mdiSquareEditOutline
+  },
+  {
     to: '/forms',
     label: 'Forms',
     icon: mdiSquareEditOutline

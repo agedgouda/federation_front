@@ -32,6 +32,14 @@ const routes = [
   },
   {
     meta: {
+      title: 'Weapons'
+    },
+    path: '/weapons',
+    name: 'weapons',
+    component: () => import('@/views/WeaponsView.vue')
+  },
+  {
+    meta: {
       title: 'Forms'
     },
     path: '/forms',

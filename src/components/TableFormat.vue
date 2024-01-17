@@ -5,7 +5,7 @@ import TableCheckboxCell from '@/components/TableCheckboxCell.vue'
 import BaseLevel from '@/components/BaseLevel.vue'
 import BaseButtons from '@/components/BaseButtons.vue'
 import BaseButton from '@/components/BaseButton.vue'
-
+import CardBoxModal from '@/components/CardBoxModal.vue'
 
 const props = defineProps({
   checkable: Boolean,
@@ -60,7 +60,7 @@ const remove = (arr, cb) => {
   <table class="table-auto">
     <thead v-if=tableHeader>
       <tr>
-        <th  v-for="headerItem in tableHeader">{{headerItem}}</th>
+        <th class="text-center" v-for="headerItem in tableHeader">{{headerItem}}</th>
       </tr>
     </thead>
     <tbody>
